@@ -1,14 +1,20 @@
-## Getting Started
+## Red-Black Binary Search Tree
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+In my Advanced Datastructures course (CMSC420), we learned extensively about Red-Black trees but never implemented them. In this project, I will design and build a RBbst from scratch. I plan on only using my course notes to create a left-leaning version. Eventually I hope to do research and implement a traditional RBbst. 
+
+My goals for this project are: 
+- learn how to design and create a Java project from scratch
+- Apply the theory I learned in class into a working model
+- improve my overall Java skills
 
 ## Folder Structure
 
-The workspace contains two folders by default, where:
+- 'src' contains my RBbst package, which includes the 'Tree.java' interface as well as 'RBbst.java' and tests.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
 
-## Dependency Management
+## Class Details
 
-The `JAVA DEPENDENCIES` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-pack/blob/master/release-notes/v0.9.0.md#work-with-jar-files-directly).
+
+## Conclusion
+
+
