@@ -9,7 +9,7 @@ My goals for this project are:
 
 ## Folder Structure
 
-- 'src' contains my RBbst package, which includes the 'Tree.java' interface as well as 'RBbst.java' and tests.
+- `src` contains my RBbst package, which includes the `Tree.java` interface as well as `RBbst.java` and tests.
 
 
 ## Class Details
