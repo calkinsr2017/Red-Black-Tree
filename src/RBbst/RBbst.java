@@ -14,12 +14,26 @@ import java.util.ArrayList;
  */
 
 public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
+    
+    private enum Color {
+        RED, BLACK;
+    }
+    
     private class node{
         private K key;
         private V value;
         private node left,right;
+        private Color color;
+        private boolean marked;
 
-        
+        public node(K key, V value){
+            this.key = key;
+            this.value = value;
+
+            this.left = this.right = null;
+            this.color = Color.RED;
+            this.marked = false;
+        }
 
     }
     /**
