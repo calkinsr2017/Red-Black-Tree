@@ -95,5 +95,12 @@ public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
         return 0;
     }
 
+    public K getRootKey(){
+        if(this.root == null) {
+            return null;
+        }
+        return this.root.key;
+        
+    }
 
 }
