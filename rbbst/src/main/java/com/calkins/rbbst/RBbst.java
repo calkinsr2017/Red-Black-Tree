@@ -1,4 +1,4 @@
-package RBbst;
+package com.calkins.rbbst;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -19,14 +19,14 @@ public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
         RED, BLACK;
     }
     
-    private class node{
+    private class Node{
         private K key;
         private V value;
-        private node left,right;
+        private Node left,right;
         private Color color;
         private boolean marked;
 
-        public node(K key, V value){
+        public Node(K key, V value){
             this.key = key;
             this.value = value;
 
@@ -41,7 +41,7 @@ public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
      */
 
     private int size;
-    
+    private Node root;
 
     public RBbst(){
 

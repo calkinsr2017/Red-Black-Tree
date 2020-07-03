@@ -1,4 +1,4 @@
-package RBbst;
+package com.calkins.rbbst;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
