@@ -44,13 +44,22 @@ public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
     private Node root;
 
     public RBbst(){
+        this.size = 0;
+        this.root = null;
+    }
 
+    public RBbst(RBbst<K,V> other){
+        //make copy constructor
     }
 
     @Override
-    public boolean put(K key, V value) throws InvalidParameterException {
-        // TODO Auto-generated method stub
-        return false;
+    public void put(K key, V value) throws InvalidParameterException {
+        if(key == null || value == null){
+            throw new InvalidParameterException();
+        }
+        root = insert(root, key, value);
+        root.color = Color.BLACK;
+        this.size++;
     }
 
     @Override
@@ -91,8 +100,7 @@ public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
 
     @Override
     public int getSize() {
-        // TODO Auto-generated method stub
-        return 0;
+       return this.size;
     }
 
     public K getRootKey(){
@@ -102,5 +110,76 @@ public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
         return this.root.key;
         
     }
+
+
+    /****************************
+     * Private helper functions *
+     * **************************/
+
+     private Node insert(Node curr, K key, V value){
+        if(curr == null) {
+            return new Node(key, value);
+        }
+        if(key.compareTo(curr.key) < 0) {
+            curr.left = insert(curr.left, key, value);
+        } else if(key.compareTo(curr.key) > 0){
+            curr.right = insert(curr.right, key, value);
+        } else {
+            curr.key = key;
+            curr.value = value;
+            return curr;
+        }
+        if(isRed(curr.right) && !isRed(curr.left)){
+            curr = rotateLeft(curr);
+        }
+        if(isRed(curr.left) && isRed(curr.left.left)){
+            curr = rotateRight(curr);
+        }
+        if(isRed(curr.left) && isRed(curr.right)) {
+            switchColors(curr);
+        }
+        
+        return curr;
+     }
+     
+     private boolean isRed(Node node){
+         if(node == null){
+             return false;
+         } else if(node.color == Color.BLACK){
+             return false;
+         } else {
+             return true;
+         }
+     }
+
+     //Called when we have two red nodes in a row on the left side
+     private Node rotateRight(Node node){
+        Node temp = node.left;
+        node.left = temp.right;
+        temp.color = node.color;
+        temp.right = node;
+        temp.right.color = Color.RED;
+        return temp;
+     }
+
+     //called when we insert a node on the right
+     private Node rotateLeft(Node node){
+        Node temp = node.right;
+        node.right = temp.left;
+        temp.color = node.color;
+        temp.left = node;
+        temp.left.color = Color.RED;
+        return temp;
+     }
+
+     
+
+     //When a node has two children with the color RED
+     private void switchColors(Node node){
+        node.right.color = node.left.color = Color.BLACK;
+        node.color = Color.BLACK;
+     }
+
+     
 
 }

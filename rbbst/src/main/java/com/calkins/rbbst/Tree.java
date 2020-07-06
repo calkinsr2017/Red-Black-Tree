@@ -19,10 +19,9 @@ public interface Tree<K extends Comparable<K>, V> {
      * If key or value is null this function will throw an InvalidParameterException.
      * @param key
      * @param value
-     * @return True when inserting a new key, False when updating an existing key
      * @throws InvalidParameterException
      */
-    public boolean put(K key, V value) throws InvalidParameterException;
+    public void put(K key, V value) throws InvalidParameterException;
 
     /**
      * Retrieves the value associated with the given key. Throws InvalidParameterException if key is null.
