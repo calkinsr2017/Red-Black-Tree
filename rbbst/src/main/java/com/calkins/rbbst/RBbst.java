@@ -64,14 +64,44 @@ public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
 
     @Override
     public V get(K key) throws InvalidParameterException {
-        // TODO Auto-generated method stub
-        return null;
+        if(key == null) {
+            throw new InvalidParameterException();
+        }
+        Node curr = root;
+        while(curr != null){
+            if(curr.key.compareTo(key) > 0) {
+                curr = curr.left;
+            } else if(curr.key.compareTo(key) < 0){
+                curr = curr.right;
+            } else if(!curr.marked){
+                return curr.value;
+            }
+        }
+
+         return null;
     }
 
     @Override
     public V remove(K key) throws InvalidParameterException {
-        // TODO Auto-generated method stub
+        if(key == null) {
+            throw new InvalidParameterException();
+        }
+
+        Node curr = root;
+        while(curr != null){
+            if(curr.key.compareTo(key) > 0) {
+                curr = curr.left;
+            } else if(curr.key.compareTo(key) < 0){
+                curr = curr.right;
+            } else if(!curr.marked){
+                curr.marked = true;
+                return curr.value;
+            }
+        }
+        //sweep phase and counter
         return null;
+
+
     }
 
     @Override
@@ -127,6 +157,7 @@ public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
         } else {
             curr.key = key;
             curr.value = value;
+            curr.marked = false;
             return curr;
         }
         if(isRed(curr.right) && !isRed(curr.left)){

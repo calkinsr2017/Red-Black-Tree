@@ -26,7 +26,7 @@ public interface Tree<K extends Comparable<K>, V> {
     /**
      * Retrieves the value associated with the given key. Throws InvalidParameterException if key is null.
      * @param key
-     * @return the value associated with key
+     * @return the value associated with key or null if the key is not in the tree
      * @throws InvalidParameterException
      */
     public V get(K key) throws InvalidParameterException;
@@ -35,7 +35,7 @@ public interface Tree<K extends Comparable<K>, V> {
      * Will remove the node associated with the given key and return the associated value.
      * 
      * @param key
-     * @return
+     * @return the value or null if key is not in the tree
      * @throws InvalidParameterException
      */
     public V remove(K key) throws InvalidParameterException;
