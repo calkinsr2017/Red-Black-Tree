@@ -15,6 +15,11 @@ import java.util.ArrayList;
 
 public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
     
+
+    /********************************************************/
+    /********************Private Classes*********************/
+    /********************************************************/
+
     private enum Color {
         RED, BLACK;
     }
@@ -36,21 +41,34 @@ public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
         }
 
     }
-    /**
-     * instance Variables
-     */
+    
+    /********************************************************/
+    /******************Instance Variables********************/
+    /********************************************************/
 
     private int size;
     private Node root;
+    private int markedNodes;
+
+
+    /*******************************************************/
+    /********************Constructors***********************/
+    /*******************************************************/
 
     public RBbst(){
         this.size = 0;
+        this.markedNodes = 0;
         this.root = null;
     }
 
     public RBbst(RBbst<K,V> other){
         //make copy constructor
     }
+
+
+    /*******************************************************/
+    /*******************Public Methods**********************/
+    /*******************************************************/
 
     @Override
     public void put(K key, V value) throws InvalidParameterException {
@@ -81,51 +99,73 @@ public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
          return null;
     }
 
+    /*Remove is implemented using mark and sweep*/
     @Override
     public V remove(K key) throws InvalidParameterException {
         if(key == null) {
             throw new InvalidParameterException();
         }
 
-        Node curr = root;
-        while(curr != null){
-            if(curr.key.compareTo(key) > 0) {
-                curr = curr.left;
-            } else if(curr.key.compareTo(key) < 0){
-                curr = curr.right;
-            } else if(!curr.marked){
-                curr.marked = true;
-                return curr.value;
-            }
+        V result = markPhase(key);
+        
+        if((double)markedNodes/(double)(size + markedNodes) > .5){
+            sweepPhase();
         }
-        //sweep phase and counter
-        return null;
-
-
+        
+        return result;
+        
     }
 
     @Override
     public boolean containsKey(K key) throws InvalidParameterException {
-        // TODO Auto-generated method stub
+        if(key == null) {
+            throw new InvalidParameterException();
+        }
+
+        Node curr = root;
+        while(curr != null){
+            if(curr.key.compareTo(key) > 0){
+                curr = curr.left;
+            } else if(curr.key.compareTo(key) < 0) {
+                curr = curr.right;
+            } else {
+                if(!curr.marked){
+                    return true;
+                }
+                break;
+            }
+        }
         return false;
     }
 
     @Override
     public boolean containsValue(V value) throws InvalidParameterException {
-        // TODO Auto-generated method stub
-        return false;
+        if(value == null) {
+            throw new InvalidParameterException();
+        } 
+
+        return containsValueHelper(value, root);
     }
+
 
     @Override
     public ArrayList<K> getKeys() {
-        // TODO Auto-generated method stub
-        return null;
+        ArrayList<K> keys = new ArrayList<>();
+
+        getKeysHelper(keys, root);
+
+        return keys;
     }
+
+    
 
     @Override
     public ArrayList<V> getValues() {
-        // TODO Auto-generated method stub
-        return null;
+        ArrayList<V> values = new ArrayList<>();
+
+        getValuesHelper(values, root);
+
+        return values;
     }
 
     @Override
@@ -133,6 +173,8 @@ public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
        return this.size;
     }
 
+
+    //for testing purposes. Key can be marked and therefore not a valid node.
     public K getRootKey(){
         if(this.root == null) {
             return null;
@@ -142,10 +184,11 @@ public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
     }
 
 
-    /****************************
-     * Private helper functions *
-     * **************************/
+    /*******************************************************/
+    /*******************Private Methods*********************/
+    /*******************************************************/
 
+    /*********************Put helpers***********************/ 
      private Node insert(Node curr, K key, V value){
         if(curr == null) {
             return new Node(key, value);
@@ -210,6 +253,77 @@ public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
         node.right.color = node.left.color = Color.BLACK;
         node.color = Color.BLACK;
      }
+
+
+    /************Contains and Get helpers*******************/
+    
+     private boolean containsValueHelper(V value, Node curr){
+        if(curr == null) {
+            return false;
+        }
+        if (curr.value.equals(value)) {
+            if(!curr.marked) {
+                return true;
+            }
+        }
+
+        return containsValueHelper(value, curr.right) || containsValueHelper(value, curr.left);
+    }
+
+     private void getKeysHelper(ArrayList<K> list, Node curr) {
+        if(curr == null) {
+            return;
+        }
+        getKeysHelper(list, curr.left);
+        if(!curr.marked){
+            list.add(curr.key);
+        }
+       
+        getKeysHelper(list, curr.right);
+    }
+
+    private void getValuesHelper(ArrayList<V> list, Node curr){
+        if(curr == null) {
+            return;
+        }
+        getValuesHelper(list, curr.left);
+        if(!curr.marked){
+            list.add(curr.value);
+        }
+        
+        getValuesHelper(list, curr.right);
+    }
+
+
+    /****************Mark and Sweep*****************/
+    private V markPhase(K key) {
+        Node curr = root;
+        while(curr != null){
+            if(curr.key.compareTo(key) > 0) {
+                curr = curr.left;
+            } else if(curr.key.compareTo(key) < 0){
+                curr = curr.right;
+            } else if(!curr.marked){
+                curr.marked = true;
+                this.size--;
+                this.markedNodes++;
+                return curr.value;
+            }
+        }
+
+        return null;
+    }
+
+    private void sweepPhase(){
+        RBbst<K,V> other = new RBbst<>();
+        ArrayList<K> keys = this.getKeys();
+        ArrayList<V> values = this.getValues();
+        for(int i = 0; i < keys.size(); i++){
+            other.put(keys.get(i), values.get(i));
+        }
+
+        this.root = other.root;
+    }
 
      
 
