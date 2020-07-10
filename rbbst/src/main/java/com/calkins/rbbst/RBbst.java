@@ -183,6 +183,22 @@ public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
         
     }
 
+    
+    public String toString(){
+        return toStringHelper(root);
+    }
+
+    private String toStringHelper(Node curr){
+        String result = "";
+        if(curr != null){
+            result += toStringHelper(curr.left);
+            result += curr.key.toString() + ":" + curr.color.toString() + "\n";
+            result += toStringHelper(curr.right);
+        }
+
+        return result;
+    }
+
 
     /*******************************************************/
     /*******************Private Methods*********************/
@@ -251,7 +267,7 @@ public class RBbst<K extends Comparable<K>, V> implements Tree<K, V> {
      //When a node has two children with the color RED
      private void switchColors(Node node){
         node.right.color = node.left.color = Color.BLACK;
-        node.color = Color.BLACK;
+        node.color = Color.RED;
      }
 
 
