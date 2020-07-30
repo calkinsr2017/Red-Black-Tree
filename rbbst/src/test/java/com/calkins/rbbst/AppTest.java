@@ -3,6 +3,10 @@ package com.calkins.rbbst;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Unit test for simple App.
@@ -68,5 +72,49 @@ class AppTest {
         assertEquals(tree.toString(), result);
     }
 
-    
+
+    @Test
+    void largeNumberOfInserts() {
+        ArrayList<Integer> list = new ArrayList<>();
+        for(int i = 0; i < 100; i++){
+            list.add(i);
+        }
+
+        Collections.shuffle(list);
+
+        RBbst<Integer, Integer> tree = new RBbst<>();
+
+        for(Integer i: list){
+            tree.put(i,i);
+        }
+
+        Collections.sort(list);
+        assertTrue(tree.getKeys().equals(list));
+        assertTrue(tree.getValues().equals(list));
+    }
+
+    @Test
+    void testBasicRemove(){
+        ArrayList<Integer> list = new ArrayList<>();
+        for(int i = 0; i < 100; i++){
+            list.add(i);
+        }
+
+        Collections.shuffle(list);
+
+        RBbst<Integer, Integer> tree = new RBbst<>();
+
+        for(Integer i: list){
+            tree.put(i,i);
+        }
+
+        for(int i = 0; i < 100; i++){
+            assertTrue(tree.remove(i) == i);
+            assertTrue(!tree.containsKey(i));
+        }
+
+        assertTrue(tree.getSize() == 0);
+    }
+
+
 }
